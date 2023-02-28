@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+return new class() extends Migration {
+    public function up(): void
+    {
+        Schema::table('bank_accounts', static function (Blueprint $table): void {
+            $table->boolean('is_inisiatif_verified')->nullable();
+        });
+
+        Schema::table('donations', static function (Blueprint $table): void {
+            $table->boolean('is_inisiatif_verified')->nullable();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('bank_accounts', static function (Blueprint $table): void {
+            $table->dropColumn('is_inisiatif_verified');
+        });
+
+        Schema::table('donations', static function (Blueprint $table): void {
+            $table->dropColumn('is_inisiatif_verified');
+        });
+    }
+};

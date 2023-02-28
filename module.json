@@ -1,0 +1,13 @@
+{
+    "name": "Inisiatif",
+    "alias": "inisiatif",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Inisiatif\\Providers\\InisiatifServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

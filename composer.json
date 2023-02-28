@@ -1,0 +1,23 @@
+{
+    "name": "ziswapp/inisiatif-module",
+    "description": "Module for Inisiatif Zakat Indonesia",
+    "authors": [
+        {
+            "name": "Nuradiyana",
+            "email": "me@nooradiana.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+              "Modules\\Inisiatif\\Providers\\InisiatifServiceProvider"
+            ]
+        },
+        "module-dir": "modules"
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Inisiatif\\": ""
+        }
+    }
+}
