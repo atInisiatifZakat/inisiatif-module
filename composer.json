@@ -12,8 +12,7 @@
             "providers": [
               "Modules\\Inisiatif\\Providers\\InisiatifServiceProvider"
             ]
-        },
-        "module-dir": "modules"
+        }
     },
     "autoload": {
         "psr-4": {
