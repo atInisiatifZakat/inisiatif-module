@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Inisiatif\Providers;
 
 use Enqueue\SimpleClient\SimpleClient;
@@ -7,8 +9,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Container\Container;
 use Modules\Inisiatif\Enqueue\EnqueueBinding;
 use Enqueue\LaravelQueue\Command\RoutesCommand;
-use Enqueue\LaravelQueue\Command\ProduceCommand;
 use Enqueue\LaravelQueue\Command\ConsumeCommand;
+use Enqueue\LaravelQueue\Command\ProduceCommand;
 use Modules\Inisiatif\Enqueue\RegisterProcessor;
 use Enqueue\LaravelQueue\Command\SetupBrokerCommand;
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Modules\Inisiatif\Admin\Pages;
 
 use Filament\Pages\Page;
-use Illuminate\Support\Arr;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
@@ -104,7 +103,7 @@ final class FoundationPage extends Page
                         ->placeholder('Nomor telepon yayasan disini'),
                 ]),
                 FileUpload::make('logo')->directory('uploads')->image()->visibility('public')->getUploadedFileNameForStorageUsing(
-                    fn(TemporaryUploadedFile $file) => str($file->getClientOriginalName())->prepend('logo-')
+                    fn (TemporaryUploadedFile $file) => str($file->getClientOriginalName())->prepend('logo-')
                 ),
                 AddressInput::make($this->foundation ?? Foundation::class),
                 InisiatifRefNumberInput::make()->nullable()->helperText('Di isi dengan partner id'),

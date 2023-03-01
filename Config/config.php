@@ -9,7 +9,7 @@ return [
 
     'enqueue' => [
         'transport' => [
-            'dsn' => env('INISIATIF_ENQUEUE_DSN', 'null://')
+            'dsn' => env('INISIATIF_ENQUEUE_DSN', 'null://'),
         ],
         'client' => [
             'router_topic' => 'default',
@@ -18,8 +18,8 @@ return [
         ],
         'extensions' => [
             'signal_extension' => true,
-            'reply_extension' => false
-        ]
+            'reply_extension' => false,
+        ],
     ],
 
     'processors' => [
@@ -27,5 +27,5 @@ return [
         //     'topic_name' => '',
         //     'processor_class' => ''
         // ]
-    ]
+    ],
 ];

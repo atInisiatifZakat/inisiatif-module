@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Inisiatif\Enqueue;
 
 use Psr\Log\LoggerInterface;
@@ -30,7 +32,7 @@ final class EnqueueBinding
                 'router_topic' => 'default',
                 'router_queue' => 'default',
                 'default_queue' => 'default',
-            ]
+            ],
         ];
     }
 }

@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Modules\Inisiatif\Providers;
 
+use Illuminate\Http\Request;
+use Laravel\Sanctum\Sanctum;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Modules\Inisiatif\Integration\Confirmation\Credentials;
 use Modules\Inisiatif\Integration\Confirmation\Confirmation;
 
@@ -22,6 +26,16 @@ final class InisiatifServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(
             \module_path($this->moduleName, 'Database/Migrations')
+        );
+
+        Sanctum::getAccessTokenFromRequestUsing(
+            static function (Request $request): ?string {
+                try {
+                    return Crypt::decrypt($request->bearerToken());
+                } catch (DecryptException) {
+                    return null;
+                }
+            }
         );
     }
 
@@ -81,7 +95,7 @@ final class InisiatifServiceProvider extends ServiceProvider
 
     protected function registerConfirmation(): void
     {
-        $this->app->singleton(Confirmation::class, static fn(Container $app) => new Confirmation(
+        $this->app->singleton(Confirmation::class, static fn (Container $app) => new Confirmation(
             new Credentials(
                 $app->make('config')->get('services.confirmation.token', ''),
                 $app->environment('production')
