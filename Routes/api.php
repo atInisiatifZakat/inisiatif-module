@@ -6,6 +6,7 @@ use Illuminate\Routing\Router;
 use Modules\Inisiatif\Http\Controllers\Rest\ProfileController;
 use Modules\Inisiatif\Http\Controllers\Rest\TokenAuthController;
 use Modules\Inisiatif\Http\Controllers\Rest\Sales\DonorController;
+use Modules\Inisiatif\Http\Controllers\Rest\Sales\DonationController;
 use Modules\Inisiatif\Http\Controllers\Rest\Sales\VerifiedAmountController;
 use Modules\Inisiatif\Http\Controllers\Rest\Sales\AmountPerProgramController;
 use Modules\Inisiatif\Http\Controllers\Rest\Sales\AmountPerFundingTypeController;
@@ -26,5 +27,9 @@ return static function (Router $router): void {
         $router->get('/amount/program', [AmountPerProgramController::class, 'show']);
 
         $router->get('/donor', [DonorController::class, 'index']);
+        $router->get('/donor/{donor}', [DonorController::class, 'show']);
+
+        $router->get('/donation', [DonationController::class, 'index']);
+        $router->get('/donation/{donation}', [DonationController::class, 'show']);
     });
 };

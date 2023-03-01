@@ -166,7 +166,9 @@ final class DonationRepository implements Repository\Contract\DonationRepository
 
         $builder = Donation::query()->withSearch($keyword)->latest();
 
-        return $this->makeQueryBuilder($builder, $request)->paginate();
+        return $this->makeQueryBuilder($builder, $request)->paginate(
+            $request->integer('limit', 15)
+        );
     }
 
     public function makeQueryBuilder(Builder|Relation|string $subject, ?Request $request = null): QueryBuilder
