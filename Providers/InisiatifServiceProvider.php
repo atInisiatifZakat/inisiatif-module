@@ -29,6 +29,7 @@ final class InisiatifServiceProvider extends ServiceProvider
     {
         $this->app->register(RouteServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
+        $this->app->register(EnqueueServiceProvider::class);
 
         $this->registerRepository();
         $this->registerConfirmation();
@@ -80,7 +81,7 @@ final class InisiatifServiceProvider extends ServiceProvider
 
     protected function registerConfirmation(): void
     {
-        $this->app->singleton(Confirmation::class, static fn (Container $app) => new Confirmation(
+        $this->app->singleton(Confirmation::class, static fn(Container $app) => new Confirmation(
             new Credentials(
                 $app->make('config')->get('services.confirmation.token', ''),
                 $app->environment('production')
