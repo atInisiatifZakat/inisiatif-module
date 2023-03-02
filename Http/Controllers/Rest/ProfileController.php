@@ -16,7 +16,7 @@ final class ProfileController
         $user = $request->user();
 
         return new JsonResource(
-            $user->only(['id', 'name', 'email'])
+            $user->only(['id', 'name', 'email', 'branch_id'])
         );
     }
 }
