@@ -8,6 +8,8 @@ use Modules\Inisiatif\Http\Controllers\Rest\TokenAuthController;
 use Modules\Inisiatif\Http\Controllers\Rest\Sales\DonorController;
 use Modules\Inisiatif\Http\Controllers\Rest\Sales\DonationController;
 use Modules\Inisiatif\Http\Controllers\Rest\Sales\VerifiedAmountController;
+use Modules\Inisiatif\Http\Controllers\Rest\Sales\DonationCancelController;
+use Modules\Inisiatif\Http\Controllers\Rest\Sales\DonationInvoiceController;
 use Modules\Inisiatif\Http\Controllers\Rest\Sales\AmountPerProgramController;
 use Modules\Inisiatif\Http\Controllers\Rest\Sales\AmountPerFundingTypeController;
 
@@ -31,5 +33,7 @@ return static function (Router $router): void {
 
         $router->get('/donation', [DonationController::class, 'index']);
         $router->get('/donation/{donation}', [DonationController::class, 'show']);
+        $router->get('/donation/{donation}/invoice', [DonationInvoiceController::class, 'show']);
+        $router->patch('/donation/{donation}/cancel', [DonationCancelController::class, 'store']);
     });
 };

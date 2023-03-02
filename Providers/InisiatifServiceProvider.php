@@ -31,7 +31,7 @@ final class InisiatifServiceProvider extends ServiceProvider
         Sanctum::getAccessTokenFromRequestUsing(
             static function (Request $request): ?string {
                 try {
-                    return Crypt::decrypt($request->bearerToken());
+                    return Crypt::decrypt($request->bearerToken() ?? $request->query('token'));
                 } catch (DecryptException) {
                     return null;
                 }

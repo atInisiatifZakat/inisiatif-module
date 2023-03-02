@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Modules\Inisiatif\Http\Controllers\Rest;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Auth\Factory;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -37,7 +37,7 @@ final class TokenAuthController
         ]);
     }
 
-    public function delete(Request $request): Response
+    public function delete(Request $request): JsonResponse
     {
         if ($request->bearerToken()) {
             $token = Crypt::decrypt($request->bearerToken());
@@ -47,6 +47,6 @@ final class TokenAuthController
             $accessToken?->forceDelete();
         }
 
-        return response()->noContent();
+        return new JsonResponse('', 204);
     }
 }

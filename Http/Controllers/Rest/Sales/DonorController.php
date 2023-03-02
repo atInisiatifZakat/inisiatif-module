@@ -18,10 +18,17 @@ final class DonorController
         );
     }
 
-    public function show(Donor $donor): JsonResource
+    public function show(string $donor, DonorRepository $donorRepository): JsonResource
     {
+        /** @var Donor|null $model */
+        $model = $donorRepository->findUsingUuid($donor);
+
+        if ($model === null) {
+            abort(404);
+        }
+
         return JsonResource::make(
-            $donor->loadMissingRelations()
+            $model->loadMissingRelations()
         );
     }
 }
