@@ -6,7 +6,12 @@ use Illuminate\Routing\Router;
 use Modules\Inisiatif\Http\Controllers\Rest\ProfileController;
 use Modules\Inisiatif\Http\Controllers\Rest\TokenAuthController;
 use Modules\Inisiatif\Http\Controllers\Rest\Sales\DonorController;
+use Modules\Inisiatif\Http\Controllers\Rest\Sales\ProgramController;
 use Modules\Inisiatif\Http\Controllers\Rest\Sales\DonationController;
+use Modules\Inisiatif\Http\Controllers\Rest\Sales\DonorChooseController;
+use Modules\Inisiatif\Http\Controllers\Rest\Sales\BankAccountController;
+use Modules\Inisiatif\Http\Controllers\Rest\Sales\FundingTypeController;
+use Modules\Inisiatif\Http\Controllers\Rest\Sales\DonorDonationController;
 use Modules\Inisiatif\Http\Controllers\Rest\Sales\DonationCancelController;
 use Modules\Inisiatif\Http\Controllers\Rest\Sales\VerifiedAmountController;
 use Modules\Inisiatif\Http\Controllers\Rest\Sales\DonationInvoiceController;
@@ -21,6 +26,10 @@ return static function (Router $router): void {
     ], static function (Router $router): void {
         $router->get('/profile', [ProfileController::class, 'show']);
         $router->delete('/auth/token', [TokenAuthController::class, 'delete']);
+
+        $router->get('/bank-account', [BankAccountController::class, 'index']);
+        $router->get('/funding-type', [FundingTypeController::class, 'index']);
+        $router->get('/program', [ProgramController::class, 'index']);
     });
 
     $router->middleware('auth:sanctum')->prefix('/sales')->group(static function (Router $router): void {
@@ -31,8 +40,10 @@ return static function (Router $router): void {
         $router->get('/donor', [DonorController::class, 'index']);
         $router->get('/donor/{donor}', [DonorController::class, 'show']);
         $router->post('/donor', [DonorController::class, 'store']);
+        $router->post('/donor/{donor}/donation', [DonorDonationController::class, 'store']);
         $router->patch('/donor/{donor}', [DonorController::class, 'update']);
 
+        $router->get('/donation/donor', [DonorChooseController::class, 'index']);
         $router->get('/donation', [DonationController::class, 'index']);
         $router->get('/donation/{donation}', [DonationController::class, 'show']);
         $router->get('/donation/{donation}/invoice', [DonationInvoiceController::class, 'show']);
