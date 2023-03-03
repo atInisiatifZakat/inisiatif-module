@@ -111,7 +111,8 @@ final class UserResource extends Resource
             Filter::make('non_active')
                 ->label('Pilih user tidak aktif')
                 ->query(fn (Builder $query) => $query->orWhereNotNull('deactivated_at')),
-            SelectFilter::make('branch.name')
+            SelectFilter::make('branch_id')
+                ->relationship('branch', 'name')
                 ->label('Cabang'),
             SelectFilter::make('team')
                 ->label('Tim')
