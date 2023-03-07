@@ -23,9 +23,9 @@ return [
     ],
 
     'processors' => [
-        // [
-        //     'topic_name' => '',
-        //     'processor_class' => ''
-        // ]
+        [
+            'topic_name' => 'edonation.donation.updated',
+            'processor_class' => Modules\Inisiatif\Enqueue\Processors\HandleVerifiedDonation::class,
+        ]
     ],
 ];
