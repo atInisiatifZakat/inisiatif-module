@@ -4,35 +4,40 @@ declare(strict_types=1);
 
 namespace Modules\Inisiatif\Enqueue;
 
+use Illuminate\Support\Arr;
 use Psr\Log\LoggerInterface;
+use Interop\Queue\Processor;
 use Enqueue\SimpleClient\SimpleClient;
-use Illuminate\Contracts\Config\Repository;
-use Illuminate\Contracts\Container\Container;
 
 final class EnqueueBinding
 {
-    public static function singleton(Container $app): SimpleClient
+    public static function makeClient(string $client = 'default', array $processors = []): SimpleClient
     {
-        /** @var Repository $config */
-        $config = $app->get('config');
+        $configs = \array_merge(Arr::only(config('inisiatif.enqueue'), ['transport', 'extensions']), [
+            'client' => \config('inisiatif.enqueue.client.' . $client, self::defaultClientConfig())
+        ]);
 
-        /** @var LoggerInterface $logger */
-        $logger = $app->make('log');
+        $simpleClient = new SimpleClient($configs, app(LoggerInterface::class));
 
-        return new SimpleClient($config->get('inisiatif.enqueue', self::defaultConfig()), $logger);
+        foreach ($processors as $processor) {
+            $processorClass = $processor['processor_class'];
+
+            if (\in_array(Processor::class, Arr::wrap(\class_implements($processorClass)), true)) {
+                $simpleClient->bindTopic(
+                    $processor['topic_name'], app($processor['processor_class']), $processor['processor_class']
+                );
+            }
+        }
+
+        return $simpleClient;
     }
 
-    private static function defaultConfig(): array
+    private static function defaultClientConfig(): array
     {
         return [
-            'transport' => [
-                'dsn' => 'null://',
-            ],
-            'client' => [
-                'router_topic' => 'default',
-                'router_queue' => 'default',
-                'default_queue' => 'default',
-            ],
+            'router_topic' => 'default',
+            'router_queue' => 'default',
+            'default_queue' => 'default',
         ];
     }
 }
