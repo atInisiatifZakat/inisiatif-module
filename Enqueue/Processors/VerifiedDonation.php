@@ -20,7 +20,7 @@ final class VerifiedDonation implements Processor
 
     public function process(Message $message, Context $context): string
     {
-        ['data' => $data] = \json_decode($message->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        ['app' => $source, 'data' => $data] = \json_decode($message->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
         if ($this->shouldBeProcess($data)) {
             /** @var Donation $donation */
@@ -36,9 +36,9 @@ final class VerifiedDonation implements Processor
         return self::REJECT;
     }
 
-    public function shouldBeProcess(array $data): bool
+    public function shouldBeProcess(string $source, array $data): bool
     {
-        return $this->confirmation->checkUsingReference(
+        return $source === 'edonation' && $this->confirmation->checkUsingReference(
             $data['id']
         );
     }

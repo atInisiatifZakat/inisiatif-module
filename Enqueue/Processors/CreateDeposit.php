@@ -13,8 +13,17 @@ final class CreateDeposit implements Processor
     {
         $body = \json_decode($message->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
-        Log::debug(\sprintf('Process message [%s]', $message->getMessageId()), $body);
+        if ($body['app']) {
+            Log::debug(\sprintf('Process message [%s]', $message->getMessageId()), $body);
+
+            return self::ACK;
+        }
 
         return self::ACK;
+    }
+
+    public function shouldBeProcess(string $source, array $data): bool
+    {
+        return $source === 'edonation';
     }
 }

@@ -33,11 +33,11 @@ final class ChangeDonationTransactionDate implements Processor
 
         return self::REJECT;
     }
-
-    public function shouldBeProcess(array $data): bool
+    public function shouldBeProcess(string $source, array $data): bool
     {
-        return $this->confirmation->checkUsingReference(
-            $data['confirmation_id']
-        ) && $data['transaction_status'] === 'VERIFIED';
+        return $source === 'edonation' &&
+            \array_key_exists('confirmation_id', $data) &&
+            $this->confirmation->checkUsingReference($data['confirmation_id']) &&
+            $data['transaction_status'] === 'VERIFIED';
     }
 }
