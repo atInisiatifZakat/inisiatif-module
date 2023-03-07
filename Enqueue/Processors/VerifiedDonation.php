@@ -22,7 +22,7 @@ final class VerifiedDonation implements Processor
     {
         ['app' => $source, 'data' => $data] = \json_decode($message->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
-        if ($this->shouldBeProcess($data)) {
+        if ($this->shouldBeProcess($source, $data)) {
             /** @var Donation $donation */
             $donation = $this->confirmation->findUsingReference(
                 $data['id']
