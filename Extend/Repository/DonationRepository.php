@@ -20,8 +20,9 @@ use Ziswapp\Domain\Transaction\Enum\DonationStatus;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Ziswapp\Domain\Transaction\Builder\DonationQueryBuilder;
+use Modules\Inisiatif\Enqueue\Contracts\HasConfirmationReference;
 
-final class DonationRepository implements Repository\Contract\DonationRepository
+final class DonationRepository implements Repository\Contract\DonationRepository, HasConfirmationReference
 {
     /**
      * @psalm-suppress PossiblyNullArgument
@@ -31,7 +32,7 @@ final class DonationRepository implements Repository\Contract\DonationRepository
         return Donation::query()
             ->join('branches', 'branches.id', '=', 'donations.branch_id')
             ->whereStatus(DonationStatus::verified)
-            ->when($start && $end, fn (Builder $builder) => $builder->whereBetween('transaction_at', [
+            ->when($start && $end, fn(Builder $builder) => $builder->whereBetween('transaction_at', [
                 $start, $end,
             ]))
             ->selectRaw('branches.name as branch, sum(amount) as aggregate')
@@ -47,9 +48,9 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     {
         return Donation::query()
             ->join('users', 'users.id', '=', 'donations.user_id')
-            ->when($branch, fn (DonationQueryBuilder $builder) => $builder->whereBranch($branch))
+            ->when($branch, fn(DonationQueryBuilder $builder) => $builder->whereBranch($branch))
             ->whereStatus(DonationStatus::verified)
-            ->when($start && $end, fn (Builder $builder) => $builder->whereBetween('transaction_at', [
+            ->when($start && $end, fn(Builder $builder) => $builder->whereBetween('transaction_at', [
                 $start, $end,
             ]))
             ->selectRaw('users.name as user, sum(amount) as aggregate')
@@ -64,12 +65,12 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     public function fetchAmountVerified(null|int|User $user = null, null|int|Branch $branch = null, ?DateTimeInterface $start = null, ?DateTimeInterface $end = null): int|string
     {
         return Donation::query()
-            ->when($user, fn (DonationQueryBuilder $builder) => $builder->whereUser($user))
-            ->when($branch, fn (DonationQueryBuilder $builder) => $builder->whereBranch($branch))
+            ->when($user, fn(DonationQueryBuilder $builder) => $builder->whereUser($user))
+            ->when($branch, fn(DonationQueryBuilder $builder) => $builder->whereBranch($branch))
             ->whereStatus(DonationStatus::verified)
             ->when(
                 $start && $end,
-                fn (DonationQueryBuilder $builder) => $builder
+                fn(DonationQueryBuilder $builder) => $builder
                     ->whereBetween('transaction_at', [$start, $end])
             )->sum('amount');
     }
@@ -80,10 +81,10 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     public function fetchAmountPaid(null|int|User $user = null, null|int|Branch $branch = null, ?DateTimeInterface $start = null, ?DateTimeInterface $end = null): int|string
     {
         return Donation::query()
-            ->when($user, fn (DonationQueryBuilder $builder) => $builder->whereUser($user))
-            ->when($branch, fn (DonationQueryBuilder $builder) => $builder->whereBranch($branch))
+            ->when($user, fn(DonationQueryBuilder $builder) => $builder->whereUser($user))
+            ->when($branch, fn(DonationQueryBuilder $builder) => $builder->whereBranch($branch))
             ->whereStatus(DonationStatus::paid)
-            ->when($start && $end, fn (Builder $builder) => $builder->whereBetween('transaction_at', [
+            ->when($start && $end, fn(Builder $builder) => $builder->whereBetween('transaction_at', [
                 $start, $end,
             ]))->sum('amount');
     }
@@ -94,12 +95,12 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     public function fetchAmountNewAndPaid(null|int|User $user = null, null|int|Branch $branch = null, ?DateTimeInterface $start = null, ?DateTimeInterface $end = null): int|string
     {
         return Donation::query()
-            ->when($user, fn (DonationQueryBuilder $builder) => $builder->whereUser($user))
-            ->when($branch, fn (DonationQueryBuilder $builder) => $builder->whereBranch($branch))
+            ->when($user, fn(DonationQueryBuilder $builder) => $builder->whereUser($user))
+            ->when($branch, fn(DonationQueryBuilder $builder) => $builder->whereBranch($branch))
             ->whereStatusIn([
                 DonationStatus::new,
                 DonationStatus::paid,
-            ])->when($start && $end, fn (Builder $builder) => $builder->whereBetween('transaction_at', [
+            ])->when($start && $end, fn(Builder $builder) => $builder->whereBetween('transaction_at', [
                 $start, $end,
             ]))->sum('amount');
     }
@@ -110,10 +111,10 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     public function fetchAmountPerStatus(null|int|User $user = null, null|int|Branch $branch = null, ?DateTimeInterface $start = null, ?DateTimeInterface $end = null): Collection
     {
         return Donation::query()
-            ->when($user, fn (DonationQueryBuilder $builder) => $builder->whereUser($user))
-            ->when($branch, fn (DonationQueryBuilder $builder) => $builder->whereBranch($branch))
+            ->when($user, fn(DonationQueryBuilder $builder) => $builder->whereUser($user))
+            ->when($branch, fn(DonationQueryBuilder $builder) => $builder->whereBranch($branch))
             ->selectRaw('status, sum(amount) as aggregate')
-            ->when($start && $end, fn (Builder $builder) => $builder->whereBetween('transaction_at', [
+            ->when($start && $end, fn(Builder $builder) => $builder->whereBetween('transaction_at', [
                 $start, $end,
             ]))
             ->groupBy('status')
@@ -127,8 +128,8 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     public function fetchAmountPerPeriod(DateTimeInterface $start, DateTimeInterface $end, null|int|User $user = null, null|int|Branch $branch = null): Collection
     {
         $builder = Donation::query()
-            ->when($user, fn (DonationQueryBuilder $builder) => $builder->whereUser($user))
-            ->when($branch, fn (DonationQueryBuilder $builder) => $builder->whereBranch($branch))
+            ->when($user, fn(DonationQueryBuilder $builder) => $builder->whereUser($user))
+            ->when($branch, fn(DonationQueryBuilder $builder) => $builder->whereBranch($branch))
             ->whereStatus(DonationStatus::verified);
 
         return Trend::query($builder)
@@ -146,7 +147,7 @@ final class DonationRepository implements Repository\Contract\DonationRepository
         $builder = Donation::query()
             ->withSearch($keyword)
             ->where(
-                fn (Builder $builder) => $builder
+                fn(Builder $builder) => $builder
                     ->where('is_inisiatif_verified', false)
                     ->orWhereNull('is_inisiatif_verified')
             )
@@ -174,9 +175,9 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     public function makeQueryBuilder(Builder|Relation|string $subject, ?Request $request = null): QueryBuilder
     {
         return QueryBuilder::for($subject, $request)->with([
-            'user' => fn (Relation $relation): Relation => $relation->select(['id', 'name']),
-            'branch' => fn (Relation $relation): Relation => $relation->select(['id', 'name']),
-            'donor' => fn (Relation $relation): Relation => $relation->select(['uuid', 'name']),
+            'user' => fn(Relation $relation): Relation => $relation->select(['id', 'name']),
+            'branch' => fn(Relation $relation): Relation => $relation->select(['id', 'name']),
+            'donor' => fn(Relation $relation): Relation => $relation->select(['uuid', 'name']),
         ])->allowedFilters([
             AllowedFilter::exact('type', 'donations.type'),
             AllowedFilter::exact('status', 'donations.status'),
@@ -186,5 +187,15 @@ final class DonationRepository implements Repository\Contract\DonationRepository
             AllowedFilter::custom('transaction_date', new DateTimeFilter(), 'donations.transaction_at'),
             AllowedFilter::custom('verified_date', new DateTimeFilter(), 'donations.verified_at'),
         ]);
+    }
+
+    public function checkUsingReference(string $refId): bool
+    {
+        return Donation::query()->where('edonation_confirmation_id', $refId)->exists();
+    }
+
+    public function findUsingReference(string $refId): ?Donation
+    {
+        return Donation::query()->where('edonation_confirmation_id', $refId)->findOr(static fn() => null);
     }
 }

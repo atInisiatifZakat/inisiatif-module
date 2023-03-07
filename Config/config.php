@@ -25,7 +25,15 @@ return [
     'processors' => [
         [
             'topic_name' => 'edonation.donation.updated',
-            'processor_class' => Modules\Inisiatif\Enqueue\Processors\HandleVerifiedDonation::class,
+            'processor_class' => Modules\Inisiatif\Enqueue\Processors\CreateDeposit::class,
+        ],
+        [
+            'topic_name' => 'edonation.donation.updated',
+            'processor_class' => Modules\Inisiatif\Enqueue\Processors\ChangeDonationTransactionDate::class,
+        ],
+        [
+            'topic_name' => 'edonation.confirmation.verified',
+            'processor_class' => Modules\Inisiatif\Enqueue\Processors\VerifiedDonation::class,
         ]
     ],
 ];
