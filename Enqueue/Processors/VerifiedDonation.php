@@ -12,7 +12,7 @@ use Modules\Inisiatif\Enqueue\Contracts\HasConfirmationReference;
 final class VerifiedDonation implements Processor
 {
     public function __construct(
-        private readonly DonationVerifiedAction   $verified,
+        private readonly DonationVerifiedAction $verified,
         private readonly HasConfirmationReference $confirmation
     )
     {
