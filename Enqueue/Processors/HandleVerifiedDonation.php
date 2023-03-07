@@ -12,7 +12,7 @@ final class HandleVerifiedDonation implements Processor
     public function process(Message $message, Context $context): string
     {
         Log::debug(
-            \sprintf('Process message [%s]' . $message->getMessageId()),
+            \sprintf('Process message [%s]', $message->getMessageId()),
             \json_decode($message->getBody(), true, 512, JSON_THROW_ON_ERROR)
         );
 
