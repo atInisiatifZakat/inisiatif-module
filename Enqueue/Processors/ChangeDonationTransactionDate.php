@@ -20,7 +20,7 @@ final class ChangeDonationTransactionDate implements Processor
     {
         ['app' => $source, 'data' => $data] = \json_decode($message->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
-        if($this->shouldBeProcess($source, $data)) {
+        if ($this->shouldBeProcess($source, $data)) {
             /** @var Donation $donation */
             $donation = $this->confirmation->findUsingReference(
                 $data['confirmation_id']
@@ -33,11 +33,13 @@ final class ChangeDonationTransactionDate implements Processor
 
         return self::REJECT;
     }
+
     public function shouldBeProcess(string $source, array $data): bool
     {
-        return $source === 'edonation' &&
-            \array_key_exists('confirmation_id', $data) &&
-            $this->confirmation->checkUsingReference($data['confirmation_id']) &&
-            $data['transaction_status'] === 'VERIFIED';
+        if ($source === 'edonation' && \array_key_exists('confirmation_id', $data) && $data['transaction_status'] === 'VERIFIED') {
+            return !\is_null($data['confirmation_id']) && $this->confirmation->checkUsingReference($data['confirmation_id']);
+        }
+
+        return false;
     }
 }
