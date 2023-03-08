@@ -110,13 +110,13 @@ final class FoundationPage extends Page
                 Grid::make()->schema([
                     InisiatifRefNumberInput::make()
                         ->nullable()
-                        ->hidden(!\config('inisiatif.mitra_ramadhan'))
+                        ->hidden(\config('inisiatif.mitra_ramadhan'))
                         ->helperText('Diisi dengan partner id'),
                     Select::make('user_id')
                         ->options(User::query()->pluck('name', 'id'))
                         ->searchable()
                         ->nullable()
-                        ->hidden(!\config('inisiatif.mitra_ramadhan'))
+                        ->hidden(\config('inisiatif.mitra_ramadhan'))
                         ->helperText('Wajib diisi untuk sinkronisasi'),
                 ]),
             ]),
