@@ -19,9 +19,11 @@ final class EnqueueBinding
 
         $simpleClient = new SimpleClient($configs, app(LoggerInterface::class));
 
-        foreach ($processors as $topicName => $processorClass) {
-            if (\in_array(Processor::class, Arr::wrap(\class_implements($processorClass)), true)) {
-                $simpleClient->bindTopic($topicName, app($processorClass), $processorClass);
+        foreach ($processors as $topicName => $processorClasses) {
+            foreach ($processorClasses as $processorClass) {
+                if (\in_array(Processor::class, Arr::wrap(\class_implements($processorClass)), true)) {
+                    $simpleClient->bindTopic($topicName, app($processorClass), $processorClass);
+                }
             }
         }
 
