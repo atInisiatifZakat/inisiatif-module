@@ -196,6 +196,6 @@ final class DonationRepository implements Repository\Contract\DonationRepository
 
     public function findUsingReference(string $refId): ?Donation
     {
-        return Donation::query()->where('edonation_confirmation_id', $refId)->findOr(static fn() => null);
+        return Donation::query()->where('edonation_confirmation_id', $refId)->firstOr(static fn() => null);
     }
 }

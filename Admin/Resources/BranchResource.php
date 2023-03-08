@@ -70,15 +70,14 @@ final class BranchResource extends Resource
                 AddressInput::make(),
                 Grid::make()->schema([
                     InisiatifRefNumberInput::make()
-                        ->nullable(!\config('inisiatif.mitra_ramadhan'))
+                        ->nullable()
                         ->hidden(!\config('inisiatif.mitra_ramadhan'))
                         ->helperText('Khusus untuk mitra ramadhan, ini wajib diisi dengan partner id'),
                     Select::make('user_id')
                         ->relationship('user', 'name')
                         ->searchable()
-                        ->nullable(!\config('inisiatif.mitra_ramadhan'))
-                        ->hidden(!\config('inisiatif.mitra_ramadhan'))
-                        ->helperText('Khusus untuk mitra ramadhan, ini wajib diisi dengan partner id'),
+                        ->nullable()
+                        ->hidden(!\config('inisiatif.mitra_ramadhan')),
                 ]),
                 Toggle::make('is_active')
                     ->label('Aktifkan cabang ini')

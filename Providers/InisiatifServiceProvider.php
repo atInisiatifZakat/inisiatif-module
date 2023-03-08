@@ -11,6 +11,7 @@ use Illuminate\Support\ServiceProvider;
 use Ziswapp\Domain\Foundation\Model\User;
 use Ziswapp\Domain\Foundation\Model\Branch;
 use Illuminate\Contracts\Container\Container;
+use Ziswapp\Domain\Foundation\Model\Foundation;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Modules\Inisiatif\Integration\Confirmation\Credentials;
 use Modules\Inisiatif\Integration\Confirmation\Confirmation;
@@ -48,6 +49,7 @@ final class InisiatifServiceProvider extends ServiceProvider
         $this->app->register(EnqueueServiceProvider::class);
 
         Branch::resolveRelationUsing('user', static fn(Branch $branch) => $branch->belongsTo(User::class, 'user_id'));
+        Foundation::resolveRelationUsing('user', static fn(Foundation $foundation) => $foundation->belongsTo(User::class, 'user_id'));
 
         $this->registerRepository();
         $this->registerConfirmation();
