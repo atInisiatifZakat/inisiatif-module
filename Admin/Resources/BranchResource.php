@@ -68,7 +68,18 @@ final class BranchResource extends Resource
                     ->label('Nama')
                     ->placeholder('Nama cabang disini'),
                 AddressInput::make(),
-                InisiatifRefNumberInput::make()->nullable()->helperText('Khusus untuk mitra ramadhan, ini wajib diisi dengan partner id'),
+                Grid::make()->schema([
+                    InisiatifRefNumberInput::make()
+                        ->nullable(!\config('inisiatif.mitra_ramadhan'))
+                        ->hidden(!\config('inisiatif.mitra_ramadhan'))
+                        ->helperText('Khusus untuk mitra ramadhan, ini wajib diisi dengan partner id'),
+                    Select::make('user_id')
+                        ->relationship('user', 'name')
+                        ->searchable()
+                        ->nullable(!\config('inisiatif.mitra_ramadhan'))
+                        ->hidden(!\config('inisiatif.mitra_ramadhan'))
+                        ->helperText('Khusus untuk mitra ramadhan, ini wajib diisi dengan partner id'),
+                ]),
                 Toggle::make('is_active')
                     ->label('Aktifkan cabang ini')
                     ->default(true),

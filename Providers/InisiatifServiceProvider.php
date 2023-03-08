@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\ServiceProvider;
+use Ziswapp\Domain\Foundation\Model\User;
+use Ziswapp\Domain\Foundation\Model\Branch;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Modules\Inisiatif\Integration\Confirmation\Credentials;
@@ -44,6 +46,8 @@ final class InisiatifServiceProvider extends ServiceProvider
         $this->app->register(RouteServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
         $this->app->register(EnqueueServiceProvider::class);
+
+        Branch::resolveRelationUsing('user', static fn(Branch $branch) => $branch->belongsTo(User::class, 'user_id'));
 
         $this->registerRepository();
         $this->registerConfirmation();
