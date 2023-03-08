@@ -32,17 +32,14 @@ return [
     ],
 
     'processors' => [
-        [
-            'topic_name' => 'edonation-donation-updated',
-            'processor_class' => Modules\Inisiatif\Enqueue\Processors\CreateDeposit::class,
+        'edonation-donation-saved' => [
+            Modules\Inisiatif\Enqueue\Processors\ChangeDonationTransactionDate::class,
+            Modules\Deposit\Enqueue\Processors\CreateDepositFromDonation::class,
+            Modules\Deposit\Enqueue\Processors\CancelDepositFromDonation::class,
         ],
-        [
-            'topic_name' => 'edonation-donation-updated',
-            'processor_class' => Modules\Inisiatif\Enqueue\Processors\ChangeDonationTransactionDate::class,
+        'edonation-confirmation-verified' => [
+            Modules\Inisiatif\Enqueue\Processors\VerifiedDonation::class,
+            Modules\Inisiatif\Enqueue\Processors\VerifiedDonation::class
         ],
-        [
-            'topic_name' => 'edonation-confirmation-verified',
-            'processor_class' => Modules\Inisiatif\Enqueue\Processors\VerifiedDonation::class,
-        ]
     ],
 ];
