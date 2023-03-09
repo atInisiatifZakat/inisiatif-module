@@ -6,13 +6,14 @@ use Interop\Queue\Message;
 use Interop\Queue\Context;
 use Interop\Queue\Processor;
 use Ziswapp\Domain\Transaction\Model\Donation;
+use Ziswapp\Domain\Transaction\Action\DonationCancelAction;
 use Ziswapp\Domain\Transaction\Action\DonationVerifiedAction;
 use Modules\Inisiatif\Enqueue\Contracts\HasConfirmationReference;
 
-final class VerifiedDonation implements Processor
+final class CancelDonationFromEDonation implements Processor
 {
     public function __construct(
-        private readonly DonationVerifiedAction $verified,
+        private readonly DonationCancelAction $cancel,
         private readonly HasConfirmationReference $confirmation
     )
     {
@@ -25,10 +26,10 @@ final class VerifiedDonation implements Processor
         if ($this->shouldBeProcess($source, $data)) {
             /** @var Donation $donation */
             $donation = $this->confirmation->findUsingReference(
-                $data['id']
+                $data['confirmation_id']
             );
 
-            $this->verified->handle($donation);
+            $this->cancel->handle($donation);
 
             return self::ACK;
         }
@@ -38,8 +39,10 @@ final class VerifiedDonation implements Processor
 
     public function shouldBeProcess(string $source, array $data): bool
     {
-        return $source === 'edonation' && $this->confirmation->checkUsingReference(
-            $data['id']
-        );
+        if ($source === 'edonation' && \array_key_exists('confirmation_id', $data) && $data['transaction_status'] === 'CANCEL') {
+            return !\is_null($data['confirmation_id']) && $this->confirmation->checkUsingReference($data['confirmation_id']);
+        }
+
+        return false;
     }
 }

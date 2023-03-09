@@ -34,12 +34,14 @@ return [
     'processors' => [
         'edonation-donation-saved' => [
             Modules\Inisiatif\Enqueue\Processors\ChangeDonationTransactionDate::class,
+            Modules\Inisiatif\Enqueue\Processors\CancelDonationFromEDonation::class,
+
             Modules\Deposit\Enqueue\Processors\CreateDepositFromDonation::class,
             Modules\Deposit\Enqueue\Processors\CancelDepositFromDonation::class,
         ],
         'edonation-confirmation-verified' => [
-            Modules\Inisiatif\Enqueue\Processors\VerifiedDonation::class,
-            Modules\Inisiatif\Enqueue\Processors\VerifiedDonation::class
+            Modules\Inisiatif\Enqueue\Processors\VerifiedDonationFromEDonation::class,
+            Modules\Inisiatif\Enqueue\Processors\VerifiedDonationFromEDonation::class
         ],
     ],
 ];
