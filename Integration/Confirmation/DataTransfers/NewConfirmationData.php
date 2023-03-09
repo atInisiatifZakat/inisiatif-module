@@ -46,7 +46,7 @@ final class NewConfirmationData extends DataTransferObject
     #[MapTo('source_id')]
     public mixed $sourceId = null;
 
-    #[MapTo('paidAt')]
+    #[MapTo('paid_at')]
     #[CastWith(DateTimeCaster::class)]
     public ?DateTimeInterface $paidAt = null;
 }
