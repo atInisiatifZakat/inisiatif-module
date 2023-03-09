@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Ziswapp\Domain\Foundation\Model\Branch;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Ziswapp\Domain\Transaction\Model\Donation;
 use Ziswapp\Domain\Foundation\Model\BankAccount;
@@ -33,9 +34,11 @@ final class NewConfirmationJobs implements ShouldQueue, ShouldBeUnique
 
     public function handle(Confirmation $confirmation, FoundationRepository $foundationRepository): void
     {
-        $foundation = $foundationRepository->getFoundation();
+        $foundationOrBranch = \config('inisiatif.mitra_ramadhan') ?
+            $this->donation->loadMissing('branch')->getRelation('branch') :
+            $foundationRepository->getFoundation();
 
-        if ($foundation === null) {
+        if ($foundationOrBranch === null) {
             throw FoundationProfileNotExist::create();
         }
 
@@ -48,8 +51,8 @@ final class NewConfirmationJobs implements ShouldQueue, ShouldBeUnique
         $items = $this->donation->getRelation('items');
 
         $output = $confirmation->createConfirmation(new NewConfirmationData([
-            'name' => $foundation->getAttribute('name'),
-            'partner' => $foundation->getAttribute('inisiatif_ref_id'),
+            'name' => $foundationOrBranch->getAttribute('name'),
+            'partner' => $foundationOrBranch->getAttribute('inisiatif_ref_id'),
             'date' => $this->donation->getAttribute('created_at'),
             'paidAt' => $this->donation->getAttribute('transaction_at'),
             'channelName' => 'Bank Transfer',
