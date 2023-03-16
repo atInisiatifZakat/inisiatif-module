@@ -97,6 +97,11 @@ final class InisiatifServiceProvider extends ServiceProvider
             \Ziswapp\Domain\Transaction\Repository\Contract\DonationRepository::class,
             \Modules\Inisiatif\Extend\Repository\DonationRepository::class,
         );
+
+        $this->app->bind(
+            \Modules\Inisiatif\Enqueue\Contracts\HasConfirmationReference::class,
+            \Modules\Inisiatif\Extend\Repository\DonationRepository::class
+        );
     }
 
     protected function registerConfirmation(): void
