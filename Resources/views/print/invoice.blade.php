@@ -81,9 +81,6 @@
                     <td><b>Nama Donatur</b></td>
                     <td>:</td>
                     <td>{{ $name }}</td>
-                    <td><b>Status</b></td>
-                    <td>:</td>
-                    <td>{{ $status }}</td>
                 </tr>
             </table>
         </div>
