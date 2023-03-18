@@ -11,7 +11,6 @@ use Illuminate\Routing\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\ValidationException;
 use Ziswapp\Domain\Transaction\Model\Donation;
-use Ziswapp\Job\SendDonationVerifiedNotification;
 use Ziswapp\Domain\Transaction\Action\DonationVerifiedAction;
 use Ziswapp\Inertia\PageProps\Transaction\VerifiedDonationProps;
 
@@ -38,9 +37,7 @@ final class DonationVerifiedController extends Controller
             ]);
         }
 
-        $newDonation = DonationVerifiedAction::handleFromRequest($donation, $request);
-
-        SendDonationVerifiedNotification::dispatch($newDonation);
+        DonationVerifiedAction::handleFromRequest($donation, $request);
 
         return new RedirectResponse('/donation/verify');
     }

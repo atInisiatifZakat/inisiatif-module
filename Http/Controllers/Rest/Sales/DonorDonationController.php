@@ -6,7 +6,7 @@ namespace Modules\Inisiatif\Http\Controllers\Rest\Sales;
 
 use Illuminate\Http\JsonResponse;
 use Ziswapp\Domain\Transaction\Model\Donor;
-use Ziswapp\Job\SendDonationConfirmNotification;
+use Ziswapp\Job\SendDonationVerifiedNotification;
 use Ziswapp\Domain\Transaction\Request\StoreDonationRequest;
 use Ziswapp\Domain\Transaction\Action\StoreNewDonationAction;
 
@@ -16,7 +16,7 @@ final class DonorDonationController
     {
         $donation = StoreNewDonationAction::handleFromRequest($request, $donor);
 
-        SendDonationConfirmNotification::dispatch($donation);
+        SendDonationVerifiedNotification::dispatch($donation);
 
         return new JsonResponse('', 204);
     }
