@@ -4,11 +4,11 @@ namespace Modules\Inisiatif\Console;
 
 use Enqueue\Symfony\Client\SimpleConsumeCommand;
 
-class EnqueueDonationConsumeCommand extends SimpleConsumeCommand
+class DefaultEnqueueConsumeCommand extends SimpleConsumeCommand
 {
     public function __construct()
     {
-        $client = app('enqueue.client.edonation');
+        $client = app('enqueue.client.default');
 
         parent::__construct(
             $client->getQueueConsumer(),
@@ -17,7 +17,7 @@ class EnqueueDonationConsumeCommand extends SimpleConsumeCommand
         );
 
         $this->setAliases([]);
-        $this->setName('enqueue:consume:edonation');
-        $this->setDescription("A `edonation` client worker that processes messages.");
+        $this->setName('enqueue:consume:default');
+        $this->setDescription("A `default` client worker that processes messages.");
     }
 }

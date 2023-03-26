@@ -17,7 +17,7 @@ return [
         ],
         'client' => [
             'default' => [
-                'app_name' => 'ziswapp',
+                'app_name' => env('INISIATIF_ENQUEUE_NAME', 'ziswapp'),
                 'router_topic' => 'default',
                 'router_queue' => 'default',
                 'default_queue' => 'default',

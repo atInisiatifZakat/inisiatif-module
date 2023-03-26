@@ -27,19 +27,14 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     /**
      * @psalm-suppress PossiblyNullArgument
      */
-    public function fetchAmountGroupByBranch(?DateTimeInterface $start = null, ?DateTimeInterface $end = null, null|int|Branch $branch = null): Collection
+    public function fetchAmountGroupByBranch(?DateTimeInterface $start = null, ?DateTimeInterface $end = null): Collection
     {
-        $branchId = $branch instanceof Branch ? $branch->getKey() : $branch;
-
         return Donation::query()
             ->join('branches', 'branches.id', '=', 'donations.branch_id')
             ->whereStatus(DonationStatus::verified)
             ->when($start && $end, fn(Builder $builder) => $builder->whereBetween('transaction_at', [
                 $start, $end,
             ]))
-            ->when($branch, fn(Builder $builder) => $builder->where(
-                fn(Builder $builder) => $builder->orWhere('branches.id', $branchId)->orWhere('branches.parent_id', $branchId)
-            ))
             ->selectRaw('branches.name as branch, sum(amount) as aggregate')
             ->groupBy('branches.name')
             ->orderBy('branches.name')
