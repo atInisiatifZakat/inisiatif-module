@@ -29,7 +29,8 @@ final class NewConfirmationJobs implements ShouldQueue, ShouldBeUnique
 
     public function __construct(
         public readonly Donation $donation
-    ) {
+    )
+    {
     }
 
     public function handle(Confirmation $confirmation, FoundationRepository $foundationRepository): void
@@ -42,6 +43,17 @@ final class NewConfirmationJobs implements ShouldQueue, ShouldBeUnique
             throw FoundationProfileNotExist::create();
         }
 
+        $foundationName = $foundationOrBranch->getAttribute('name');
+        $inisiatifRefId = $foundationOrBranch->getAttribute('inisiatif_ref_id');
+
+        if ($foundationOrBranch instanceof Branch && $foundationOrBranch->getAttribute('type') === 'KCP') {
+            /** @var Branch $parent */
+            $parent = $foundationOrBranch->loadMissing('parent')->getRelation('parent');
+
+            $foundationName = $parent->getAttribute('name') . ' - ' . $foundationOrBranch->getAttribute('name');
+            $inisiatifRefId = $foundationOrBranch->getAttribute('inisiatif_ref_id') ?: $parent->getAttribute('inisiatif_ref_id');
+        }
+
         $this->donation->loadMissing(['items', 'items.funding', 'items.program'])->loadMissingRelations('account');
 
         /** @var BankAccount $account */
@@ -51,8 +63,8 @@ final class NewConfirmationJobs implements ShouldQueue, ShouldBeUnique
         $items = $this->donation->getRelation('items');
 
         $output = $confirmation->createConfirmation(new NewConfirmationData([
-            'name' => $foundationOrBranch->getAttribute('name'),
-            'partner' => $foundationOrBranch->getAttribute('inisiatif_ref_id'),
+            'name' => $foundationName,
+            'partner' => $inisiatifRefId,
             'date' => $this->donation->getAttribute('created_at'),
             'paidAt' => $this->donation->getAttribute('transaction_at'),
             'channelName' => 'Bank Transfer',
