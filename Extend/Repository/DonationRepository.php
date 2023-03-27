@@ -27,14 +27,15 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     /**
      * @psalm-suppress PossiblyNullArgument
      */
-    public function fetchAmountGroupByBranch(?DateTimeInterface $start = null, ?DateTimeInterface $end = null): Collection
+    public function fetchAmountGroupByBranch(Branch $branch, DateTimeInterface $start, DateTimeInterface $end): Collection
     {
+        $branchIds = $branch->getSelfAndDescendants();
+
         return Donation::query()
             ->join('branches', 'branches.id', '=', 'donations.branch_id')
             ->whereStatus(DonationStatus::verified)
-            ->when($start && $end, fn(Builder $builder) => $builder->whereBetween('transaction_at', [
-                $start, $end,
-            ]))
+            ->whereBranches($branchIds)
+            ->whereBetween('transaction_at', [$start, $end])
             ->selectRaw('branches.name as branch, sum(amount) as aggregate')
             ->groupBy('branches.name')
             ->orderBy('branches.name')
@@ -44,93 +45,47 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     /**
      * @psalm-suppress PossiblyNullArgument
      */
-    public function fetchAmountGroupByUser(Branch|int|null $branch = null, ?DateTimeInterface $start = null, ?DateTimeInterface $end = null): Collection
+    public function fetchAmountVerified(Branch $branch, DateTimeInterface $start, DateTimeInterface $end, ?User $user = null): int|string
     {
+        $branchIds = $branch->getSelfAndDescendants();
+        $userIds = $user?->getCurrentAndDescendantIds();
+
         return Donation::query()
-            ->join('users', 'users.id', '=', 'donations.user_id')
-            ->when($branch, fn(DonationQueryBuilder $builder) => $builder->whereBranch($branch))
+            ->whereBranches($branchIds)
             ->whereStatus(DonationStatus::verified)
-            ->when($start && $end, fn(Builder $builder) => $builder->whereBetween('transaction_at', [
-                $start, $end,
-            ]))
-            ->selectRaw('users.name as user, sum(amount) as aggregate')
-            ->groupBy('users.name')
-            ->orderBy('users.name')
-            ->get();
+            ->whereBetween('transaction_at', [$start, $end])
+            ->when($userIds, fn(DonationQueryBuilder $builder) => $builder->whereUsers($userIds))
+            ->sum('amount');
     }
 
     /**
      * @psalm-suppress PossiblyNullArgument
      */
-    public function fetchAmountVerified(null|int|User $user = null, null|int|Branch $branch = null, ?DateTimeInterface $start = null, ?DateTimeInterface $end = null): int|string
+    public function fetchAmountNewAndPaid(Branch $branch, DateTimeInterface $start, DateTimeInterface $end, ?User $user = null): int|string
     {
+        $branchIds = $branch->getSelfAndDescendants();
+        $userIds = $user?->getCurrentAndDescendantIds();
+
         return Donation::query()
-            ->when($user, fn(DonationQueryBuilder $builder) => $builder->whereUser($user))
-            ->when($branch, fn(DonationQueryBuilder $builder) => $builder->whereBranch($branch))
-            ->whereStatus(DonationStatus::verified)
-            ->when(
-                $start && $end,
-                fn(DonationQueryBuilder $builder) => $builder
-                    ->whereBetween('transaction_at', [$start, $end])
-            )->sum('amount');
+            ->whereBranches($branchIds)
+            ->whereBetween('transaction_at', [$start, $end])
+            ->whereStatusIn([DonationStatus::new, DonationStatus::paid])
+            ->when($user, fn(DonationQueryBuilder $builder) => $builder->whereUsers($userIds))
+            ->sum('amount');
     }
 
     /**
      * @psalm-suppress PossiblyNullArgument
      */
-    public function fetchAmountPaid(null|int|User $user = null, null|int|Branch $branch = null, ?DateTimeInterface $start = null, ?DateTimeInterface $end = null): int|string
+    public function fetchAmountPerPeriod(Branch $branch, DateTimeInterface $start, DateTimeInterface $end, ?User $user = null): Collection
     {
-        return Donation::query()
-            ->when($user, fn(DonationQueryBuilder $builder) => $builder->whereUser($user))
-            ->when($branch, fn(DonationQueryBuilder $builder) => $builder->whereBranch($branch))
-            ->whereStatus(DonationStatus::paid)
-            ->when($start && $end, fn(Builder $builder) => $builder->whereBetween('transaction_at', [
-                $start, $end,
-            ]))->sum('amount');
-    }
+        $branchIds = $branch->getSelfAndDescendants();
+        $userIds = $user?->getCurrentAndDescendantIds();
 
-    /**
-     * @psalm-suppress PossiblyNullArgument
-     */
-    public function fetchAmountNewAndPaid(null|int|User $user = null, null|int|Branch $branch = null, ?DateTimeInterface $start = null, ?DateTimeInterface $end = null): int|string
-    {
-        return Donation::query()
-            ->when($user, fn(DonationQueryBuilder $builder) => $builder->whereUser($user))
-            ->when($branch, fn(DonationQueryBuilder $builder) => $builder->whereBranch($branch))
-            ->whereStatusIn([
-                DonationStatus::new,
-                DonationStatus::paid,
-            ])->when($start && $end, fn(Builder $builder) => $builder->whereBetween('transaction_at', [
-                $start, $end,
-            ]))->sum('amount');
-    }
-
-    /**
-     * @psalm-suppress PossiblyNullArgument
-     */
-    public function fetchAmountPerStatus(null|int|User $user = null, null|int|Branch $branch = null, ?DateTimeInterface $start = null, ?DateTimeInterface $end = null): Collection
-    {
-        return Donation::query()
-            ->when($user, fn(DonationQueryBuilder $builder) => $builder->whereUser($user))
-            ->when($branch, fn(DonationQueryBuilder $builder) => $builder->whereBranch($branch))
-            ->selectRaw('status, sum(amount) as aggregate')
-            ->when($start && $end, fn(Builder $builder) => $builder->whereBetween('transaction_at', [
-                $start, $end,
-            ]))
-            ->groupBy('status')
-            ->orderBy('status')
-            ->get();
-    }
-
-    /**
-     * @psalm-suppress PossiblyNullArgument
-     */
-    public function fetchAmountPerPeriod(DateTimeInterface $start, DateTimeInterface $end, null|int|User $user = null, null|int|Branch $branch = null): Collection
-    {
         $builder = Donation::query()
-            ->when($user, fn(DonationQueryBuilder $builder) => $builder->whereUser($user))
-            ->when($branch, fn(DonationQueryBuilder $builder) => $builder->whereBranch($branch))
-            ->whereStatus(DonationStatus::verified);
+            ->whereBranches($branchIds)
+            ->whereStatus(DonationStatus::verified)
+            ->when($user, fn (DonationQueryBuilder $builder) => $builder->whereUsers($userIds));
 
         return Trend::query($builder)
             ->dateColumn('transaction_at')
