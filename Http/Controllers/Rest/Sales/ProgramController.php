@@ -12,7 +12,7 @@ final class ProgramController
     public function index(ProgramRepository $repository): JsonResource
     {
         return JsonResource::collection(
-            $repository->fetchForSelectOption()
+            $repository->fetchActiveForSelectOption()
         );
     }
 }

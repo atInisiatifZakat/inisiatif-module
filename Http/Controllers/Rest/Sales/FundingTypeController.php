@@ -12,7 +12,7 @@ final class FundingTypeController
     public function index(FundingTypeRepository $repository): JsonResource
     {
         return JsonResource::collection(
-            $repository->fetchForSelectOption()
+            $repository->fetchActiveForSelectOption()
         );
     }
 }

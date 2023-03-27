@@ -12,7 +12,7 @@ final class BankAccountController
     public function index(BankAccountRepository $repository): JsonResource
     {
         return JsonResource::collection(
-            $repository->fetchForSelectOption()
+            $repository->fetchActiveForSelectOption()
         );
     }
 }
