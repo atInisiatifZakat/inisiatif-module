@@ -51,7 +51,7 @@ final class FoundationPage extends Page
 
         $this->foundation = Foundation::query()->first();
 
-        $this->data = $this->foundation->toArray();
+        $this->data = $this->foundation?->toArray();
 
         $this->form->fill($this->data)->model($this->foundation);
     }
