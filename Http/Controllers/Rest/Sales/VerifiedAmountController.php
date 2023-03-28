@@ -17,10 +17,10 @@ final class VerifiedAmountController
         $user = $request->user();
 
         $amount = $donationRepository->fetchAmountVerified(
-            $user,
-            null,
-            $request->date('start'),
-            $request->date('end')
+            $user->getBranch(),
+            $request->date('start', null, $user->getAttribute('timezone')),
+            $request->date('end', null, $user->getAttribute('timezone')),
+            $user
         );
 
         return JsonResource::make([
