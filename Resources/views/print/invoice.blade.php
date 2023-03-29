@@ -54,13 +54,16 @@
 <body>
 <div class="box">
     <div style="margin: 5px">
-        <img style="margin:20px 5rem 0 .5rem" src="{{ $logo }}"
-             height="65" alt="Logo Mitra">
-        <img style="margin-left: 7rem" src="https://asset.inisiatif.id/logo-izi-full-transparant.png"
-             height="65" alt="LAZNAS IZI">
+        <div style="text-align: left; vertical-align: center;">
+            <img style="position:absolute;left:0;" height="55" src="{{ $logo }}" alt="IZI POINT">
+        </div>
+        <div style="text-align: right; vertical-align: center;">
+            <img style="position:absolute;right:0" height="55"
+                 src="https://asset.inisiatif.id/logo-izi-full-transparant.png" alt="LAZNAS IZI">
+        </div>
     </div>
 
-    <div style="margin: 5px;">
+    <div style="margin: 55px 5px 0 5px">
         <p style="font-weight: bold; font-size: 16px; text-align: center;">BUKTI PEMBAYARAN</p>
 
         <p>Kepada Bapak/Ibu <strong>{{ $name }}</strong></p>
@@ -144,7 +147,7 @@
 
         <div style="margin: 10px 0 1em 0; text-align: center;">
             <img src="https://raw.githubusercontent.com/atfromhome/image-assets/main/other/doa-muzaki.png" alt="Doa"
-                 width="75%"/>
+                 width="75%" />
         </div>
 
         <p style="margin: 10px 0 1em 0; line-height: 22px; text-align: justify;">
