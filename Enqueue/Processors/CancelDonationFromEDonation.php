@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Inisiatif\Enqueue\Processors;
 
-use Interop\Queue\Message;
 use Interop\Queue\Context;
+use Interop\Queue\Message;
 use Interop\Queue\Processor;
 use Ziswapp\Domain\Transaction\Model\Donation;
 use Ziswapp\Domain\Transaction\Action\DonationCancelAction;
-use Ziswapp\Domain\Transaction\Action\DonationVerifiedAction;
 use Modules\Inisiatif\Enqueue\Contracts\HasConfirmationReference;
 
 final class CancelDonationFromEDonation implements Processor
@@ -15,8 +16,7 @@ final class CancelDonationFromEDonation implements Processor
     public function __construct(
         private readonly DonationCancelAction $cancel,
         private readonly HasConfirmationReference $confirmation
-    )
-    {
+    ) {
     }
 
     public function process(Message $message, Context $context): string
@@ -40,7 +40,7 @@ final class CancelDonationFromEDonation implements Processor
     public function shouldBeProcess(string $source, array $data): bool
     {
         if ($source === 'edonation' && \array_key_exists('confirmation_id', $data) && $data['transaction_status'] === 'CANCEL') {
-            return !\is_null($data['confirmation_id']) && $this->confirmation->checkUsingReference($data['confirmation_id']);
+            return $data['confirmation_id'] !== null && $this->confirmation->checkUsingReference($data['confirmation_id']);
         }
 
         return false;

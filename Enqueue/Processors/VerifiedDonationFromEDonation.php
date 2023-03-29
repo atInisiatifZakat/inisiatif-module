@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Inisiatif\Enqueue\Processors;
 
-use Interop\Queue\Message;
 use Interop\Queue\Context;
+use Interop\Queue\Message;
 use Interop\Queue\Processor;
 use Ziswapp\Domain\Transaction\Model\Donation;
 use Ziswapp\Domain\Transaction\Action\DonationVerifiedAction;
@@ -14,8 +16,7 @@ final class VerifiedDonationFromEDonation implements Processor
     public function __construct(
         private readonly DonationVerifiedAction $verified,
         private readonly HasConfirmationReference $confirmation
-    )
-    {
+    ) {
     }
 
     public function process(Message $message, Context $context): string

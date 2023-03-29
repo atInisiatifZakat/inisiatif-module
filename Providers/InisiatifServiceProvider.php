@@ -48,8 +48,8 @@ final class InisiatifServiceProvider extends ServiceProvider
         $this->app->register(EventServiceProvider::class);
         $this->app->register(EnqueueServiceProvider::class);
 
-        Branch::resolveRelationUsing('user', static fn(Branch $branch) => $branch->belongsTo(User::class, 'user_id'));
-        Foundation::resolveRelationUsing('user', static fn(Foundation $foundation) => $foundation->belongsTo(User::class, 'user_id'));
+        Branch::resolveRelationUsing('user', static fn (Branch $branch) => $branch->belongsTo(User::class, 'user_id'));
+        Foundation::resolveRelationUsing('user', static fn (Foundation $foundation) => $foundation->belongsTo(User::class, 'user_id'));
 
         $this->registerRepository();
         $this->registerConfirmation();

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Modules\Inisiatif\Enqueue;
 
 use Illuminate\Support\Arr;
-use Psr\Log\LoggerInterface;
 use Interop\Queue\Processor;
+use Psr\Log\LoggerInterface;
 use Enqueue\SimpleClient\SimpleClient;
 
 final class EnqueueBinding
@@ -14,7 +14,7 @@ final class EnqueueBinding
     public static function makeClient(string $client = 'default', array $processors = []): SimpleClient
     {
         $configs = \array_merge(Arr::only(config('inisiatif.enqueue'), ['transport', 'extensions']), [
-            'client' => \config('inisiatif.enqueue.client.' . $client, self::defaultClientConfig())
+            'client' => \config('inisiatif.enqueue.client.' . $client, self::defaultClientConfig()),
         ]);
 
         $simpleClient = new SimpleClient($configs, app(LoggerInterface::class));

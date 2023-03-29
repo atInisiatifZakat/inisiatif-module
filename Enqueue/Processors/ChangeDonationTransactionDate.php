@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Inisiatif\Enqueue\Processors;
 
 use Interop\Queue\Context;
@@ -12,8 +14,7 @@ final class ChangeDonationTransactionDate implements Processor
 {
     public function __construct(
         private readonly HasConfirmationReference $confirmation
-    )
-    {
+    ) {
     }
 
     public function process(Message $message, Context $context): string
@@ -26,7 +27,9 @@ final class ChangeDonationTransactionDate implements Processor
                 $data['confirmation_id']
             );
 
-            $donation->forceFill(['transaction_at' => $data['transaction_date']])->save();
+            $donation->forceFill([
+                'transaction_at' => $data['transaction_date'],
+            ])->save();
 
             return self::ACK;
         }
@@ -37,7 +40,7 @@ final class ChangeDonationTransactionDate implements Processor
     public function shouldBeProcess(string $source, array $data): bool
     {
         if ($source === 'edonation' && \array_key_exists('confirmation_id', $data) && $data['transaction_status'] === 'VERIFIED') {
-            return !\is_null($data['confirmation_id']) && $this->confirmation->checkUsingReference($data['confirmation_id']);
+            return $data['confirmation_id'] !== null && $this->confirmation->checkUsingReference($data['confirmation_id']);
         }
 
         return false;

@@ -6,8 +6,8 @@ namespace Modules\Inisiatif\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Modules\Inisiatif\Enqueue\EnqueueBinding;
-use Modules\Inisiatif\Extend\Repository\DonationRepository;
 use Modules\Inisiatif\Console\DefaultEnqueueConsumeCommand;
+use Modules\Inisiatif\Extend\Repository\DonationRepository;
 use Modules\Inisiatif\Console\EnqueueDonationConsumeCommand;
 use Modules\Inisiatif\Enqueue\Contracts\HasConfirmationReference;
 
@@ -17,12 +17,14 @@ final class EnqueueServiceProvider extends ServiceProvider
     {
         $this->app->bind(HasConfirmationReference::class, DonationRepository::class);
 
-        $this->app->singleton('enqueue.client.edonation', static fn() => EnqueueBinding::makeClient(
-            'edonation', \config('inisiatif.processors')
+        $this->app->singleton('enqueue.client.edonation', static fn () => EnqueueBinding::makeClient(
+            'edonation',
+            \config('inisiatif.processors')
         ));
 
-        $this->app->singleton('enqueue.client.default', static fn() => EnqueueBinding::makeClient(
-            'default', \config('inisiatif.processors')
+        $this->app->singleton('enqueue.client.default', static fn () => EnqueueBinding::makeClient(
+            'default',
+            \config('inisiatif.processors')
         ));
 
         if ($this->app->runningInConsole()) {

@@ -41,7 +41,7 @@ return [
         ],
         'edonation-confirmation-verified' => [
             Modules\Inisiatif\Enqueue\Processors\VerifiedDonationFromEDonation::class,
-            Modules\Inisiatif\Enqueue\Processors\VerifiedDonationFromEDonation::class
+            Modules\Inisiatif\Enqueue\Processors\VerifiedDonationFromEDonation::class,
         ],
     ],
 ];

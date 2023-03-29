@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Inisiatif\Console;
 
 use Enqueue\Symfony\Client\SimpleConsumeCommand;
 
-class EnqueueDonationConsumeCommand extends SimpleConsumeCommand
+final class EnqueueDonationConsumeCommand extends SimpleConsumeCommand
 {
     public function __construct()
     {
@@ -18,6 +20,6 @@ class EnqueueDonationConsumeCommand extends SimpleConsumeCommand
 
         $this->setAliases([]);
         $this->setName('enqueue:consume:edonation');
-        $this->setDescription("A `edonation` client worker that processes messages.");
+        $this->setDescription('A `edonation` client worker that processes messages.');
     }
 }

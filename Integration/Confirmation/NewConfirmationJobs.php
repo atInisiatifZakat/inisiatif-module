@@ -29,8 +29,7 @@ final class NewConfirmationJobs implements ShouldQueue, ShouldBeUnique
 
     public function __construct(
         public readonly Donation $donation
-    )
-    {
+    ) {
     }
 
     public function handle(Confirmation $confirmation, FoundationRepository $foundationRepository): void

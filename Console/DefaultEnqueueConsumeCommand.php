@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Inisiatif\Console;
 
 use Enqueue\Symfony\Client\SimpleConsumeCommand;
 
-class DefaultEnqueueConsumeCommand extends SimpleConsumeCommand
+final class DefaultEnqueueConsumeCommand extends SimpleConsumeCommand
 {
     public function __construct()
     {
@@ -18,6 +20,6 @@ class DefaultEnqueueConsumeCommand extends SimpleConsumeCommand
 
         $this->setAliases([]);
         $this->setName('enqueue:consume:default');
-        $this->setDescription("A `default` client worker that processes messages.");
+        $this->setDescription('A `default` client worker that processes messages.');
     }
 }
