@@ -64,8 +64,7 @@ final class UserResource extends Resource
                     TextInput::make('password')
                         ->required(fn (Component $livewire): bool => $livewire instanceof UserResource\Pages\CreateUser)
                         ->password()
-                        ->same('passwordConfirmation')
-                        ->dehydrated(fn (Component $livewire): bool => $livewire instanceof UserResource\Pages\CreateUser),
+                        ->same('passwordConfirmation'),
                     TextInput::make('passwordConfirmation')
                         ->required(fn (Component $livewire): bool => $livewire instanceof UserResource\Pages\CreateUser)
                         ->password()
