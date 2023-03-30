@@ -40,10 +40,24 @@ final class DonationRepository implements Repository\Contract\DonationRepository
             ->whereStatus(DonationStatus::verified)
             ->whereBranches($branch->getSelfAndDescendants())
             ->whereBetween('transaction_at', [$start, $end])
-            ->selectRaw('branches.name as branch, sum(amount) as aggregate')
-            ->groupBy('branches.name')
+            ->selectRaw('branches.id, branches.name as branch, sum(amount) as aggregate')
+            ->groupBy('branches.id', 'branches.name')
             ->orderByRaw('sum(amount) DESC')
             ->get();
+    }
+
+    public function fetchAmountGroupByUser(Branch $branch, DateTimeInterface $start, DateTimeInterface $end): LengthAwarePaginator
+    {
+        return Donation::query()
+            ->join('users', 'users.id', '=', 'donations.user_id')
+            ->join('branches', 'branches.id', '=', 'donations.branch_id')
+            ->whereBranches($branch->getSelfAndDescendants())
+            ->whereStatus(DonationStatus::verified)
+            ->whereBetween('transaction_at', [$start, $end])
+            ->selectRaw('users.id, branches.name as branch, users.name as user, sum(amount) as aggregate')
+            ->groupBy('users.id', 'branches.name', 'users.name')
+            ->orderByRaw('sum(amount) desc')
+            ->paginate();
     }
 
     /**
