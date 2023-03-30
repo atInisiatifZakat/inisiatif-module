@@ -49,6 +49,24 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     /**
      * @psalm-suppress PossiblyNullArgument
      */
+    public function fetchAmountGroupByType(Branch $branch, DateTimeInterface $start, DateTimeInterface $end, ?User $user = null): Collection
+    {
+        $branchIds = $branch->getSelfAndDescendants();
+        $userIds = $user?->getCurrentAndDescendantIds();
+
+        return Donation::query()
+            ->selectRaw('type, sum(amount) as aggregate')
+            ->whereBranches($branchIds)
+            ->whereStatus(DonationStatus::verified)
+            ->whereBetween('transaction_at', [$start, $end])
+            ->when($userIds, fn (DonationQueryBuilder $builder) => $builder->whereUsers($userIds))
+            ->groupBy('type')
+            ->get();
+    }
+
+    /**
+     * @psalm-suppress PossiblyNullArgument
+     */
     public function fetchAmountVerified(Branch $branch, DateTimeInterface $start, DateTimeInterface $end, ?User $user = null): int|string
     {
         $branchIds = $branch->getSelfAndDescendants();
