@@ -7,6 +7,30 @@ return [
 
     'mitra_ramadhan' => env('INISIATIF_RAMADHAN', false),
 
+    'menu' => [
+        'order' => 1,
+        'label' => 'Dashboard',
+        'menus' => [
+            [
+                'group' => null,
+                'menus' => [
+                    [
+                        "label" => "Penghimpunan",
+                        "href" => "/dashboard/donation",
+                        "icon" => "activity",
+                        "permission" => "menu.dashboard.donation"
+                    ],
+                    [
+                        "label" => "Deposit",
+                        "href" => "/dashboard/deposit",
+                        "icon" => "activity",
+                        "permission" => "menu.dashboard.deposit"
+                    ]
+                ],
+            ],
+        ],
+    ],
+
     'enqueue' => [
         'transport' => [
             'dsn' => env('INISIATIF_ENQUEUE_DSN', 'null://'),
