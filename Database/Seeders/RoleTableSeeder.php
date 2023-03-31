@@ -33,6 +33,7 @@ final class RoleTableSeeder extends Seeder
                 'action.donation.edit', 'action.donation.show',
                 'action.donor.create', 'action.donor.show',
 
+                'menu.donation.dashboard', 'menu.donation.report.employee',
                 'menu.dashboard.donation', 'menu.donation',
                 'menu.donor', 'menu.export.donation',
             ])->get()
@@ -52,8 +53,9 @@ final class RoleTableSeeder extends Seeder
                 'action.donation.edit', 'action.donation.show',
                 'action.donor.create', 'action.donor.show',
 
-                'menu.dashboard.donation', 'menu.donation',
-                'menu.donor', 'menu.export.donation',
+                'menu.donation.dashboard', 'menu.donation.report.employee',
+                'menu.dashboard.donation', 'menu.deposit.dashboard',
+                'menu.donation', 'menu.donor', 'menu.export.donation',
             ])->get()
         );
     }
@@ -75,7 +77,8 @@ final class RoleTableSeeder extends Seeder
                 'action.withdrawal.cancel', 'action.withdrawal.create', 'action.withdrawal.show',
                 'action.deposit.cancel', 'action.deposit.create', 'action.deposit.show',
 
-                'menu.dashboard.donation', 'menu.deposit', 'menu.donation', 'menu.donation.verified',
+                'menu.donation.dashboard', 'menu.donation.report.employee', 'menu.dashboard.donation',
+                'menu.deposit.dashboard', 'menu.deposit', 'menu.donation', 'menu.donation.verified',
                 'menu.donor', 'menu.export.donation', 'menu.export.donation', 'menu.export.ledger',
                 'menu.ledger', 'menu.withdrawal',
             ])->get()
