@@ -28,12 +28,6 @@ final class EditUser extends EditRecord
 
         Arr::set($data, 'deactivated_at', $active ? null : now()->toDateTimeString());
 
-        dd(
-            $password ? \array_merge($data, [
-                'password' => \bcrypt($password),
-            ]) : $data
-        );
-
         return $password ? \array_merge($data, [
             'password' => \bcrypt($password),
         ]) : $data;
