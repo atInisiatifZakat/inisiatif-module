@@ -78,8 +78,8 @@ final class NewConfirmationJobs implements ShouldQueue, ShouldBeUnique
                 ],
             ],
             'items' => $items->map(fn (DonationItem $item) => new ConfirmationItem([
-                'type' => $item->getAttribute('funding')?->getAttribute('name'),
-                'product' => $item->getAttribute('product')?->getAttribute('name') ?? $item->getAttribute('funding')?->getAttribute('name'),
+                'type' => $item->getAttribute('funding')->getAttribute('name'),
+                'product' => $item->getAttribute('program')?->getAttribute('name') ?? $item->getAttribute('funding')->getAttribute('name'),
                 'amount' => $item->getAttribute('amount'),
             ])),
             'sourceId' => $this->donation->getAttribute(
