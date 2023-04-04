@@ -17,11 +17,10 @@ final class AmountPerFundingTypeController
         $user = $request->user();
 
         return JsonResource::make(
-            $itemRepository->fetchAmountGroupByFundingType(
-                $user->getBranch(),
+            $itemRepository->fetchUserAmountGroupByFundingType(
+                $user,
                 $request->date('start', null, $user->getAttribute('timezone')),
                 $request->date('end', null, $user->getAttribute('timezone')),
-                $user
             )->map(fn (mixed $item) => [
                 'funding_type' => $item->getAttribute('funding_type'),
                 'aggregate' => (float) $item->getAttribute('aggregate'),

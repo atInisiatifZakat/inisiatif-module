@@ -17,11 +17,10 @@ final class AmountPerProgramController
         $user = $request->user();
 
         return JsonResource::make(
-            $itemRepository->fetchAmountGroupByProgram(
-                $user->getBranch(),
+            $itemRepository->fetchUserAmountGroupByProgram(
+                $user,
                 $request->date('start', null, $user->getAttribute('timezone')),
-                $request->date('end', null, $user->getAttribute('timezone')),
-                $user
+                $request->date('end', null, $user->getAttribute('timezone'))
             )->map(fn (mixed $item) => [
                 'program' => $item->getAttribute('program'),
                 'aggregate' => (float) $item->getAttribute('aggregate'),
