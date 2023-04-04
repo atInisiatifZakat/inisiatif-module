@@ -66,5 +66,8 @@ return [
         'edonation-confirmation-verified' => [
             Modules\Inisiatif\Enqueue\Processors\VerifiedDonationFromEDonation::class,
         ],
+        'edonation-confirmation-canceled' => [
+            Modules\Inisiatif\Enqueue\Processors\CancelDonationFromConfirmation::class,
+        ],
     ],
 ];
