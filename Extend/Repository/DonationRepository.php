@@ -94,6 +94,18 @@ final class DonationRepository implements Repository\Contract\DonationRepository
             ->sum('amount');
     }
 
+    public function fetchUserAmountVerified(User $user, ?DateTimeInterface $start = null, ?DateTimeInterface $end = null): int|string
+    {
+        return Donation::query()
+            ->whereStatus(DonationStatus::verified)
+            ->when(
+                $start=== null && $end === null,
+                fn(DonationQueryBuilder $builder) => $builder->whereBetween('transaction_at', [$start, $end])
+            )
+            ->whereUser($user)
+            ->sum('amount');
+    }
+
     /**
      * @psalm-suppress PossiblyNullArgument
      */
