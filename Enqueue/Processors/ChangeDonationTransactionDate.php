@@ -29,7 +29,7 @@ final class ChangeDonationTransactionDate implements Processor
             );
 
             $donation->forceFill([
-                'transaction_at' => Carbon::parse($data['transaction_date'])->timezone('Asia/Jakarta'),
+                'transaction_at' => Carbon::parse($data['transaction_date'])->timezone('Asia/Jakarta')->toDateString(),
             ])->save();
 
             return self::ACK;
