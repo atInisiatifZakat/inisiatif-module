@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Inisiatif\Enqueue\Processors;
 
+use Carbon\Carbon;
 use Interop\Queue\Context;
 use Interop\Queue\Message;
 use Interop\Queue\Processor;
@@ -28,7 +29,7 @@ final class ChangeDonationTransactionDate implements Processor
             );
 
             $donation->forceFill([
-                'transaction_at' => $data['transaction_date'],
+                'transaction_at' => Carbon::parse($data['transaction_date'], 'Asia/Jakarta'),
             ])->save();
 
             return self::ACK;
