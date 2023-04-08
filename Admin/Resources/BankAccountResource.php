@@ -54,6 +54,7 @@ final class BankAccountResource extends Resource
                 ]),
                 Toggle::make('is_active')->label('Rekening aktif')->default(true),
                 Toggle::make('is_inisiatif_verified')->label('Transaksi harus di verifikasi oleh Inisiatif Zakat Indonesia')->default(true),
+                Toggle::make('do_not_send_notification')->label('Jangan kirim notifikasi untuk transaksi via rekening ini')->default(false),
             ]),
         ]);
     }
@@ -78,6 +79,9 @@ final class BankAccountResource extends Resource
             IconColumn::make('is_inisiatif_verified')
                 ->boolean()
                 ->label('Verifikasi IZI'),
+            IconColumn::make('do_not_send_notification')
+                ->boolean()
+                ->label('Tidak dikirim notifikasi'),
         ]);
     }
 
