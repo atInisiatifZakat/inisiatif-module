@@ -150,6 +150,15 @@ const ShowDonationPage = () => {
                   )}
                 />
               </FormControl>
+              <FormControl isReadOnly>
+                <FormLabel htmlFor="edonation_confirmation_number">
+                  Donation Konfirmasi Number
+                </FormLabel>
+                <Input
+                  id="edonation_confirmation_number"
+                  value={donation?.edonation_confirmation_number || "-"}
+                />
+              </FormControl>
             </SimpleGrid>
             <FormControl py={4} isReadOnly>
               <FormLabel htmlFor="note">Catatan</FormLabel>
