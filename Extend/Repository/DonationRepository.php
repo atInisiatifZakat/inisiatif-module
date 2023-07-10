@@ -99,7 +99,7 @@ final class DonationRepository implements Repository\Contract\DonationRepository
         return Donation::query()
             ->whereStatus(DonationStatus::verified)
             ->when(
-                $start=== null && $end === null,
+                $start !== null && $end !== null,
                 fn(DonationQueryBuilder $builder) => $builder->whereBetween('transaction_at', [$start, $end])
             )
             ->whereUser($user)
