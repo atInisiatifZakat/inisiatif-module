@@ -31,6 +31,7 @@ final class Confirmation
         $response = $this->getHttpClient()->post('/', $params);
 
         Log::debug('Response create confirmation', $response->json());
+
         return new NewConfirmationOutput(
             $response->json()
         );

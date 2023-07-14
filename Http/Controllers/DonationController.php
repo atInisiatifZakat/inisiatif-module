@@ -37,6 +37,6 @@ final class DonationController
 
         UpdateDonationAction::handleFromRequest($donation, $request);
 
-        return new RedirectResponse('/donation/' . $donation->getKey());
+        return new RedirectResponse('/donation/'.$donation->getKey());
     }
 }

@@ -63,7 +63,7 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     /**
      * @psalm-suppress PossiblyNullArgument
      */
-    public function fetchAmountGroupByType(Branch $branch, DateTimeInterface $start, DateTimeInterface $end, ?User $user = null): Collection
+    public function fetchAmountGroupByType(Branch $branch, DateTimeInterface $start, DateTimeInterface $end, User $user = null): Collection
     {
         $branchIds = $branch->getSelfAndDescendants();
         $userIds = $user?->getCurrentAndDescendantIds();
@@ -81,7 +81,7 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     /**
      * @psalm-suppress PossiblyNullArgument
      */
-    public function fetchAmountVerified(Branch $branch, DateTimeInterface $start, DateTimeInterface $end, ?User $user = null): int|string
+    public function fetchAmountVerified(Branch $branch, DateTimeInterface $start, DateTimeInterface $end, User $user = null): int|string
     {
         $branchIds = $branch->getSelfAndDescendants();
         $userIds = $user?->getCurrentAndDescendantIds();
@@ -94,13 +94,13 @@ final class DonationRepository implements Repository\Contract\DonationRepository
             ->sum('amount');
     }
 
-    public function fetchUserAmountVerified(User $user, ?DateTimeInterface $start = null, ?DateTimeInterface $end = null): int|string
+    public function fetchUserAmountVerified(User $user, DateTimeInterface $start = null, DateTimeInterface $end = null): int|string
     {
         return Donation::query()
             ->whereStatus(DonationStatus::verified)
             ->when(
                 $start !== null && $end !== null,
-                fn(DonationQueryBuilder $builder) => $builder->whereBetween('transaction_at', [$start, $end])
+                fn (DonationQueryBuilder $builder) => $builder->whereBetween('transaction_at', [$start, $end])
             )
             ->whereUser($user)
             ->sum('amount');
@@ -109,7 +109,7 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     /**
      * @psalm-suppress PossiblyNullArgument
      */
-    public function fetchAmountNewAndPaid(Branch $branch, DateTimeInterface $start, DateTimeInterface $end, ?User $user = null): int|string
+    public function fetchAmountNewAndPaid(Branch $branch, DateTimeInterface $start, DateTimeInterface $end, User $user = null): int|string
     {
         $branchIds = $branch->getSelfAndDescendants();
         $userIds = $user?->getCurrentAndDescendantIds();
@@ -125,7 +125,7 @@ final class DonationRepository implements Repository\Contract\DonationRepository
     /**
      * @psalm-suppress PossiblyNullArgument
      */
-    public function fetchAmountPerPeriod(Branch $branch, DateTimeInterface $start, DateTimeInterface $end, ?User $user = null): Collection
+    public function fetchAmountPerPeriod(Branch $branch, DateTimeInterface $start, DateTimeInterface $end, User $user = null): Collection
     {
         $branchIds = $branch->getSelfAndDescendants();
         $userIds = $user?->getCurrentAndDescendantIds();
@@ -175,7 +175,7 @@ final class DonationRepository implements Repository\Contract\DonationRepository
         );
     }
 
-    public function makeQueryBuilder(Builder|Relation|string $subject, ?Request $request = null): QueryBuilder
+    public function makeQueryBuilder(Builder|Relation|string $subject, Request $request = null): QueryBuilder
     {
         return QueryBuilder::for($subject, $request)->with([
             'user' => fn (Relation $relation): Relation => $relation->select(['id', 'name']),

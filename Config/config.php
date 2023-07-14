@@ -15,17 +15,17 @@ return [
                 'group' => null,
                 'menus' => [
                     [
-                        "label" => "Penghimpunan",
-                        "href" => "/dashboard/donation",
-                        "icon" => "activity",
-                        "permission" => "menu.dashboard.donation"
+                        'label' => 'Penghimpunan',
+                        'href' => '/dashboard/donation',
+                        'icon' => 'activity',
+                        'permission' => 'menu.dashboard.donation',
                     ],
                     [
-                        "label" => "Deposit",
-                        "href" => "/dashboard/deposit",
-                        "icon" => "activity",
-                        "permission" => "menu.dashboard.deposit"
-                    ]
+                        'label' => 'Deposit',
+                        'href' => '/dashboard/deposit',
+                        'icon' => 'activity',
+                        'permission' => 'menu.dashboard.deposit',
+                    ],
                 ],
             ],
         ],

@@ -12,6 +12,6 @@ final class DonationInvoiceController
 {
     public function show(Donation $donation, GenerateDonationInvoiceAction $invoiceAction): Response
     {
-        return $invoiceAction->handle($donation)->download('KUITANSI - ' . $donation->getAttribute('identification_number') . '.pdf');
+        return $invoiceAction->handle($donation)->download('KUITANSI - '.$donation->getAttribute('identification_number').'.pdf');
     }
 }

@@ -49,7 +49,7 @@ final class NewConfirmationJobs implements ShouldQueue, ShouldBeUnique
             /** @var Branch $parent */
             $parent = $foundationOrBranch->loadMissing('parent')->getRelation('parent');
 
-            $foundationName = $parent->getAttribute('name') . ' - ' . $foundationOrBranch->getAttribute('name');
+            $foundationName = $parent->getAttribute('name').' - '.$foundationOrBranch->getAttribute('name');
             $inisiatifRefId = $foundationOrBranch->getAttribute('inisiatif_ref_id') ?: $parent->getAttribute('inisiatif_ref_id');
         }
 

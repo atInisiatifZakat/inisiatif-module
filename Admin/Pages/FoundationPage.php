@@ -58,7 +58,7 @@ final class FoundationPage extends Page
 
     public static function registerNavigationItems(): void
     {
-        if (! static::shouldRegisterNavigation()) {
+        if (! self::shouldRegisterNavigation()) {
             return;
         }
 
@@ -66,7 +66,7 @@ final class FoundationPage extends Page
         $user = Filament::auth()->user();
 
         if ($user->getAttribute('is_super_admin') || $user->hasPermissionTo('menu.foundation')) {
-            Filament::registerNavigationItems(static::getNavigationItems());
+            Filament::registerNavigationItems(self::getNavigationItems());
         }
     }
 

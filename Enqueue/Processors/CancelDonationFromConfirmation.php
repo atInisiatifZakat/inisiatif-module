@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Inisiatif\Enqueue\Processors;
 
 use Interop\Queue\Context;
@@ -35,7 +37,7 @@ final class CancelDonationFromConfirmation implements Processor
 
     public function shouldBeProcess(string $source, array $data): bool
     {
-        if($source === 'edonation' && $data['status'] === 'CANCEL') {
+        if ($source === 'edonation' && $data['status'] === 'CANCEL') {
             return $this->confirmation->checkUsingReference($data['id']);
         }
 
