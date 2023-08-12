@@ -15,7 +15,7 @@ import {
   useDisclosure,
   VStack
 } from "@chakra-ui/react";
-import { InertiaLink } from "@inertiajs/inertia-react";
+import { Link as InertiaLink } from "@inertiajs/react";
 import { ActionButton } from "@ziswapp/components/action-button";
 import { Card, CardGroup } from "@ziswapp/components/card";
 import { DonationItemList } from "@ziswapp/components/donation-item-list";
